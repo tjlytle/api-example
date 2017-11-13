@@ -1,0 +1,17 @@
+{
+  "name": "tjlytle/api_examples",
+  "description": "Example Code for API Training",
+  "minimum-stability": "stable",
+  "license": "mit",
+  "authors": [
+    {
+      "name": "Tim Lytle",
+      "email": "tim@timlytle.net"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "WorldSpeakers\\": "conference_data/src"
+    }
+  }
+}
