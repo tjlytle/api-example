@@ -1,0 +1,729 @@
+swagger: '2.0'
+info:
+  version: ''
+  title: WorldOfSpeakers
+  description: ''
+host: tjlytle.ngrok.io
+schemes:
+  - http
+produces:
+  - application/hal+json
+paths:
+  /:
+    get:
+      operationId: get-entrypoint
+      summary: API Entrypoint
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+          examples:
+            application/hal+json:
+              _links:
+                self:
+                  href: /
+                talks:
+                  href: 'https://tjlytle.ngrok.io/talks'
+                  title: List Talks
+                speakers:
+                  href: 'https://tjlytle.ngrok.io/speakers'
+                  title: List Speakers
+      x-stoplight:
+        id: get-entrypoint
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  /favorites:
+    get:
+      operationId: list-favorites
+      summary: List Favorites
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/favorite-collection'
+          examples:
+            application/hal+json:
+              count: 98404890
+              _links:
+                self:
+                  href: 'http://tina.biz'
+                next:
+                  href: 'https://coty.com'
+                prev:
+                  href: 'http://horacio.net'
+                first:
+                  href: 'https://marian.info'
+                favorites:
+                  - href: 'http://kane.com'
+                    title: enim voluptate eu id
+                  - href: 'https://vivien.com'
+                    title: ipsum sit
+                  - href: 'https://arlo.biz'
+                    title: et ad proident
+                  - href: 'http://berenice.name'
+                    title: dolor ad officia culpa
+                  - href: 'http://hans.com'
+                    title: mollit
+      x-stoplight:
+        id: list-favorites
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  '/speakers/{speaker_id}':
+    parameters:
+      - name: speaker_id
+        in: path
+        required: true
+        type: string
+    get:
+      operationId: get-speaker
+      summary: Get Speaker
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/speaker'
+          examples:
+            application/hal+json:
+              name: Tim Lytle
+              company:
+                name: PhoneBurner
+              bio: 'Tim likes making things, is a lover of well built APIs, and hates the top reply. A former mercenary developer, he''s built numerous applications specializing in API consumption and creation. Now he''s working on the platform of BeckonCall. He also tweets sporadically from @tjlytle.'
+              social:
+                - name: Twitter
+                  link: 'http://twitter.com/tjltle'
+              _links:
+                self:
+                  href: 'https://tjlytle.ngrok.io/speaker/a097ddd21ad3c46a6231b22ab6e40ff3'
+                talks:
+                  - href: 'https://tjlytle.ngrok.io/talks/bd63965424bc79b8fc0472649f16a0cc'
+                    title: Hands-On API Design
+                  - href: 'https://tjlytle.ngrok.io/talks/824f9c92fd740b0b83b16c27d6012de0'
+                    title: Building PHP Daemons and Long Running Processes
+      x-stoplight:
+        id: get-speaker
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  '/talks/{talk_id}':
+    parameters:
+      - name: talk_id
+        in: path
+        required: true
+        type: string
+    get:
+      operationId: get-talk
+      summary: Get Talk
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/talk'
+          examples:
+            application/hal+json:
+              title: Hands-On API Design
+              description: 'Building your next mobile app, SaaS product, or web app using an API first philosophy? Already maintain an API and want to step back and think about API design? Join us for a day of hands-on training! We''ll build and iterate over a simple API, exploring concepts that give your API a solid foundation: authentication, REST based design and workflows, practical hypermedia, versioning, API request/response formats. Because your API may start out serving the needs of internal mobile clients, or single page web apps, but one day (sooner than you think) you''ll be turning it into a public API.'
+              keywords:
+                - api
+              date: '2017-11-14T14:30:00+00:00'
+              room: Ash Grove C
+              type: training
+              level: beginner
+              _links:
+                self:
+                  href: 'https://tjlytle.ngrok.io/talks/bd63965424bc79b8fc0472649f16a0cc'
+                speakers:
+                  - href: 'https://tjlytle.ngrok.io/speakers/a097ddd21ad3c46a6231b22ab6e40ff3'
+                    title: Tim Lytle
+      x-stoplight:
+        id: get-talk
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  /talks:
+    get:
+      operationId: list-talks
+      summary: List Talks
+      parameters:
+        - name: page
+          in: query
+          type: integer
+          default: 0
+        - name: size
+          in: query
+          type: integer
+          default: 10
+        - name: before
+          in: query
+          type: string
+          format: date-time
+        - name: after
+          in: query
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/talk-collection'
+          examples:
+            application/hal+json:
+              count: 2
+              _links:
+                self:
+                  href: 'https://tjlytle.ngrok.io/talks?size=2'
+                first:
+                  href: 'https://tjlytle.ngrok.io/talks?size=2&page=0'
+                next:
+                  href: 'https://tjlytle.ngrok.io/talks?size=2&page=1'
+              _embedded:
+                talks:
+                  - title: Component-Based Theming With Twig
+                    description: 'While we have all read about, watched, and even worked with Drupal and WordPress to create themes, the introduction of Twig has changed the traditional way of working with HTML, CSS, and JS. There is a movement away from traditional theme-centric design and towards component-based design. Learn how to identify patterns, define components, and utilize command line tools such as Composer, npm, and Grunt to quickly create a Pattern Lab managed theme. Work smarter, not harder as we create components that can be placed into any project.'
+                    keywords:
+                      - Twig
+                      - Drupal 8
+                      - WordPress
+                      - Pattern Lab
+                      - Components
+                    date: '2017-11-13T14:30:00+00:00'
+                    room: Ash Grove C
+                    type: training
+                    level: intermediate
+                    _links:
+                      self:
+                        href: 'https://tjlytle.ngrok.io/talks/?size=287989025b250c956032acc35fb62b75a'
+                      speakers:
+                        - href: 'https://tjlytle.ngrok.io/speakers/?size=2ecf60b07768ff558ab60a0263a60df61'
+                          title: Chaz Chumley
+                  - title: PHPUnit Master Class
+                    description: 'PHPUnit Master Class is designed to help you master the art of writing unit tests in a Test-Driven Development way. You will learn how to convert functional requirements into units, write the tests, and finally write the concrete code implementation.'
+                    keywords:
+                      - phpunit
+                      - training
+                      - tdd
+                    date: '2017-11-13T14:30:00+00:00'
+                    room: Ash Grove B
+                    type: training
+                    level: advanced
+                    _links:
+                      self:
+                        href: 'https://tjlytle.ngrok.io/talks/?size=23bfc334d064dde706c5f30582003b587'
+                      speakers:
+                        - href: 'https://tjlytle.ngrok.io/speakers/?size=2db7c4d5b87298b7e3052f1fe45cc4ee9'
+                          title: Michelangelo van Dam
+      x-stoplight:
+        id: list-talks
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  /speakers:
+    get:
+      operationId: list-speakers
+      summary: List Speakers
+      parameters:
+        - name: page
+          in: query
+          type: integer
+          default: 0
+        - name: size
+          in: query
+          type: integer
+          default: 10
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/speaker-collection'
+          examples:
+            application/hal+json:
+              count: 1
+              _links:
+                self:
+                  href: 'https://tjlytle.ngrok.io/speakers?size=1'
+                first:
+                  href: 'https://tjlytle.ngrok.io/talks?size=1&page=0'
+                next:
+                  href: 'https://tjlytle.ngrok.io/talks?size=1&page=1'
+              _embedded:
+                speakers:
+                  - name: Tim Lytle
+                    company:
+                      name: PhoneBurner
+                    bio: 'Tim likes making things, is a lover of well built APIs, and hates the top reply. A former mercenary developer, he''s built numerous applications specializing in API consumption and creation. Now he''s working on the platform of BeckonCall. He also tweets sporadically from @tjlytle.'
+                    social:
+                      - name: Twitter
+                        link: 'http://twitter.com/tjltle'
+                    _links:
+                      self:
+                        href: 'https://tjlytle.ngrok.io/speaker/a097ddd21ad3c46a6231b22ab6e40ff3'
+                      talks:
+                        - href: 'https://tjlytle.ngrok.io/talks/bd63965424bc79b8fc0472649f16a0cc'
+                          title: Hands-On API Design
+                        - href: 'https://tjlytle.ngrok.io/talks/824f9c92fd740b0b83b16c27d6012de0'
+                          title: Building PHP Daemons and Long Running Processes
+      x-stoplight:
+        id: list-speakers
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+definitions:
+  speaker:
+    title: Speaker
+    type: object
+    properties:
+      name:
+        type: string
+      bio:
+        type: string
+      company:
+        type: object
+        properties:
+          name:
+            type: string
+      social:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            link:
+              type: string
+          required:
+            - name
+            - link
+      _links:
+        type: object
+        required:
+          - self
+          - talks
+        properties:
+          self:
+            type: object
+            required:
+              - href
+            properties:
+              href:
+                type: string
+                format: uri
+          talks:
+            type: array
+            items:
+              type: object
+              properties:
+                href:
+                  type: string
+                  format: uri
+                title:
+                  type: string
+              required:
+                - href
+                - title
+    required:
+      - name
+      - bio
+      - company
+      - social
+      - _links
+    example:
+      name: Tim Lytle
+      company:
+        name: PhoneBurner
+      bio: 'Tim likes making things, is a lover of well built APIs, and hates the top reply. A former mercenary developer, he''s built numerous applications specializing in API consumption and creation. Now he''s working on the platform of BeckonCall. He also tweets sporadically from @tjlytle.'
+      social:
+        - name: Twitter
+          link: 'http://twitter.com/tjltle'
+      _links:
+        self:
+          href: 'https://tjlytle.ngrok.io/speaker/a097ddd21ad3c46a6231b22ab6e40ff3'
+        talks:
+          - href: 'https://tjlytle.ngrok.io/talks/bd63965424bc79b8fc0472649f16a0cc'
+            title: Hands-On API Design
+          - href: 'https://tjlytle.ngrok.io/talks/824f9c92fd740b0b83b16c27d6012de0'
+            title: Building PHP Daemons and Long Running Processes
+    x-stoplight:
+      id: speaker
+      name: Speaker
+      public: true
+  talk:
+    title: Talk
+    type: object
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+      keywords:
+        type: array
+        items:
+          type: string
+      date:
+        type: string
+        format: date-time
+      room:
+        type: string
+      type:
+        type: string
+        enum:
+          - workshop
+          - session
+          - training
+      level:
+        type: string
+        enum:
+          - beginner
+          - advanced
+          - intermediate
+          - all
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            required:
+              - href
+            properties:
+              href:
+                type: string
+                format: uri
+          speakers:
+            type: array
+            items:
+              type: object
+              properties:
+                href:
+                  type: string
+                  format: uri
+                title:
+                  type: string
+              required:
+                - href
+                - title
+        required:
+          - self
+          - speakers
+    required:
+      - title
+      - description
+      - keywords
+      - date
+      - room
+      - type
+      - level
+    example:
+      title: Hands-On API Design
+      description: 'Building your next mobile app, SaaS product, or web app using an API first philosophy? Already maintain an API and want to step back and think about API design? Join us for a day of hands-on training! We''ll build and iterate over a simple API, exploring concepts that give your API a solid foundation: authentication, REST based design and workflows, practical hypermedia, versioning, API request/response formats. Because your API may start out serving the needs of internal mobile clients, or single page web apps, but one day (sooner than you think) you''ll be turning it into a public API.'
+      keywords:
+        - api
+      date: '2017-11-14T14:30:00+00:00'
+      room: Ash Grove C
+      type: training
+      level: beginner
+      _links:
+        self:
+          href: 'https://tjlytle.ngrok.io/talks/bd63965424bc79b8fc0472649f16a0cc'
+        speakers:
+          - href: 'https://tjlytle.ngrok.io/speakers/a097ddd21ad3c46a6231b22ab6e40ff3'
+            title: Tim Lytle
+    x-stoplight:
+      id: talk
+      name: Talk
+      public: true
+  speaker-collection:
+    title: Speaker Collection
+    type: object
+    properties:
+      count:
+        type: integer
+      _links:
+        type: object
+        required:
+          - self
+          - first
+        properties:
+          self:
+            type: object
+            required:
+              - href
+            properties:
+              href:
+                type: string
+                format: uri
+          next:
+            type: object
+            properties:
+              href:
+                type: string
+                format: uri
+            required:
+              - href
+          prev:
+            type: object
+            properties:
+              href:
+                type: string
+                format: uri
+            required:
+              - href
+          first:
+            type: object
+            required:
+              - href
+            properties:
+              href:
+                type: string
+                format: uri
+      _embedded:
+        type: object
+        properties:
+          speakers:
+            type: array
+            items:
+              $ref: '#/definitions/speaker'
+    required:
+      - count
+      - _links
+      - _embedded
+    example:
+      count: 1
+      _links:
+        self:
+          href: 'https://tjlytle.ngrok.io/speakers?size=1'
+        first:
+          href: 'https://tjlytle.ngrok.io/talks?size=1&page=0'
+        next:
+          href: 'https://tjlytle.ngrok.io/talks?size=1&page=1'
+      _embedded:
+        speakers:
+          - name: Tim Lytle
+            company:
+              name: PhoneBurner
+            bio: 'Tim likes making things, is a lover of well built APIs, and hates the top reply. A former mercenary developer, he''s built numerous applications specializing in API consumption and creation. Now he''s working on the platform of BeckonCall. He also tweets sporadically from @tjlytle.'
+            social:
+              - name: Twitter
+                link: 'http://twitter.com/tjltle'
+            _links:
+              self:
+                href: 'https://tjlytle.ngrok.io/speaker/a097ddd21ad3c46a6231b22ab6e40ff3'
+              talks:
+                - href: 'https://tjlytle.ngrok.io/talks/bd63965424bc79b8fc0472649f16a0cc'
+                  title: Hands-On API Design
+                - href: 'https://tjlytle.ngrok.io/talks/824f9c92fd740b0b83b16c27d6012de0'
+                  title: Building PHP Daemons and Long Running Processes
+    x-stoplight:
+      id: speaker-collection
+      name: Speaker Collection
+      public: true
+  talk-collection:
+    title: Talk Collection
+    type: object
+    properties:
+      count:
+        type: integer
+      _links:
+        type: object
+        required:
+          - self
+          - first
+        properties:
+          self:
+            type: object
+            required:
+              - href
+            properties:
+              href:
+                type: string
+                format: uri
+          next:
+            type: object
+            properties:
+              href:
+                type: string
+                format: uri
+            required:
+              - href
+          prev:
+            type: object
+            properties:
+              href:
+                type: string
+                format: uri
+            required:
+              - href
+          first:
+            type: object
+            required:
+              - href
+            properties:
+              href:
+                type: string
+                format: uri
+      _embedded:
+        type: object
+        properties:
+          talks:
+            type: array
+            items:
+              $ref: '#/definitions/talk'
+    required:
+      - count
+      - _links
+      - _embedded
+    example:
+      count: 2
+      _links:
+        self:
+          href: 'https://tjlytle.ngrok.io/talks?size=2'
+        first:
+          href: 'https://tjlytle.ngrok.io/talks?size=2&page=0'
+        next:
+          href: 'https://tjlytle.ngrok.io/talks?size=2&page=1'
+      _embedded:
+        talks:
+          - title: Component-Based Theming With Twig
+            description: 'While we have all read about, watched, and even worked with Drupal and WordPress to create themes, the introduction of Twig has changed the traditional way of working with HTML, CSS, and JS. There is a movement away from traditional theme-centric design and towards component-based design. Learn how to identify patterns, define components, and utilize command line tools such as Composer, npm, and Grunt to quickly create a Pattern Lab managed theme. Work smarter, not harder as we create components that can be placed into any project.'
+            keywords:
+              - Twig
+              - Drupal 8
+              - WordPress
+              - Pattern Lab
+              - Components
+            date: '2017-11-13T14:30:00+00:00'
+            room: Ash Grove C
+            type: training
+            level: intermediate
+            _links:
+              self:
+                href: 'https://tjlytle.ngrok.io/talks/?size=287989025b250c956032acc35fb62b75a'
+              speakers:
+                - href: 'https://tjlytle.ngrok.io/speakers/?size=2ecf60b07768ff558ab60a0263a60df61'
+                  title: Chaz Chumley
+          - title: PHPUnit Master Class
+            description: 'PHPUnit Master Class is designed to help you master the art of writing unit tests in a Test-Driven Development way. You will learn how to convert functional requirements into units, write the tests, and finally write the concrete code implementation.'
+            keywords:
+              - phpunit
+              - training
+              - tdd
+            date: '2017-11-13T14:30:00+00:00'
+            room: Ash Grove B
+            type: training
+            level: advanced
+            _links:
+              self:
+                href: 'https://tjlytle.ngrok.io/talks/?size=23bfc334d064dde706c5f30582003b587'
+              speakers:
+                - href: 'https://tjlytle.ngrok.io/speakers/?size=2db7c4d5b87298b7e3052f1fe45cc4ee9'
+                  title: Michelangelo van Dam
+    x-stoplight:
+      id: talk-collection
+      name: Talk Collection
+      public: true
+  favorite-collection:
+    title: Favorite Collection
+    type: object
+    properties:
+      count:
+        type: integer
+      _links:
+        type: object
+        required:
+          - self
+          - first
+          - favorites
+        properties:
+          self:
+            type: object
+            required:
+              - href
+            properties:
+              href:
+                type: string
+                format: uri
+          next:
+            type: object
+            properties:
+              href:
+                type: string
+                format: uri
+            required:
+              - href
+          prev:
+            type: object
+            properties:
+              href:
+                type: string
+                format: uri
+            required:
+              - href
+          first:
+            type: object
+            required:
+              - href
+            properties:
+              href:
+                type: string
+                format: uri
+          favorites:
+            type: array
+            items:
+              type: object
+              properties:
+                href:
+                  type: string
+                  format: uri
+                title:
+                  type: string
+              required:
+                - href
+                - title
+    required:
+      - count
+      - _links
+    x-stoplight:
+      id: favorite-collection
+      name: Favorite Collection
+      public: true
+x-stoplight:
+  version:
+    groups:
+      docs: []
+      traits: []
+      tests: []
+      savedEntries: []
+  functions: {}
+  textSections: {}
+  mock:
+    enabled: false
+    dynamic: false
+x-tests: {}
