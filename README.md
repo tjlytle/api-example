@@ -29,3 +29,9 @@ To run the php development service:
 
 By default, it expects the gateway script to be at `public/index.php`.
 
+Data
+----
+
+To import the data, you can use `conference_data/bin/import.php`. 
+
+    docker-compose run --rm php /app/conference_data/bin/import.php
