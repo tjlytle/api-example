@@ -155,14 +155,12 @@ class Api
             // API clients.
             $data = $this->getRepresentationForTalk($talk);
 
-            // Get the speaker, because we know HAL expects it.
-            $speaker = $source->getSpeakerById($talk['speaker']);
+            $resource = new Hal(
+                $request->getUri()->withPath('/talks/') . $talk['id'],
+                $data
+            );
 
-            // Take our data representation, the resource ID (used to create the
-            // URI), the speaker (as HAL wants to link to them), and the request
-            // (so we know how to assemble the URI), and create a HAL object we
-            // can render as output.
-            return $this->getHalForTalk($talk['id'], $data, $speaker, $request);
+            return $resource;
         }
 
         // Ensure that we have the default paging parameters, and get the talks.
@@ -182,8 +180,11 @@ class Api
         foreach($talks as $talk)
         {
             $data = $this->getRepresentationForTalk($talk);
-            $speaker = $source->getSpeakerById($talk['speaker']);
-            $resource = $this->getHalForTalk($talk['id'], $data, $speaker, $request);
+
+            $resource = new Hal(
+                $request->getUri()->withPath('/talks/') . $talk['id'],
+                $data
+            );
 
             // Add the talks to the collection, and ensure that if there's only
             // one on the page it's still an array as expected.
@@ -276,10 +277,6 @@ class Api
      */
     protected function addPagingLinks(Hal $collection, RequestInterface $request, array $params, $count)
     {
-        $new = $params;
-        $new['page'] = 0;
-        $collection->addLink('first', (string) $request->getUri()->withQuery(http_build_query($new)));
-
         if($params['page'] > 0){
             $new = $params;
             $new['page']--;
