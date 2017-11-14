@@ -2,7 +2,7 @@
   "name": "tjlytle/api_examples",
   "description": "Example Code for API Training",
   "minimum-stability": "stable",
-  "license": "mit",
+  "license": "MIT",
   "authors": [
     {
       "name": "Tim Lytle",
@@ -11,7 +11,13 @@
   ],
   "autoload": {
     "psr-4": {
-      "WorldSpeakers\\": "conference_data/src"
+      "WorldSpeakers\\": "conference_data/src",
+      "WorldApi\\": "src"
     }
+  },
+  "require": {
+    "zendframework/zend-diactoros": "^1.6",
+    "crell/api-problem": "^2.0",
+    "nocarrier/hal": "^0.9.12"
   }
 }
