@@ -1,0 +1,22 @@
+{
+  "title": "Hands-On API Design",
+  "description": "Building your next mobile app, SaaS product, or web app using an API first philosophy? Already maintain an API and want to step back and think about API design? Join us for a day of hands-on training! We'll build and iterate over a simple API, exploring concepts that give your API a solid foundation: authentication, REST based design and workflows, practical hypermedia, versioning, API request/response formats. Because your API may start out serving the needs of internal mobile clients, or single page web apps, but one day (sooner than you think) you'll be turning it into a public API.",
+  "keywords": [
+    "api"
+  ],
+  "date": "2017-11-14T14:30:00+00:00",
+  "room": "Ash Grove C",
+  "type": "training",
+  "level": "beginner",
+  "_links": {
+    "self": {
+      "href": "https://tjlytle.ngrok.io/talks/bd63965424bc79b8fc0472649f16a0cc"
+    },
+    "speakers": [
+      {
+        "href": "https://tjlytle.ngrok.io/speakers/a097ddd21ad3c46a6231b22ab6e40ff3",
+        "title": "Tim Lytle"
+      }
+    ]
+  }
+}

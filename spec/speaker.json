@@ -1,0 +1,28 @@
+{
+  "name": "Tim Lytle",
+  "company": {
+    "name": "PhoneBurner"
+  },
+  "bio": "Tim likes making things, is a lover of well built APIs, and hates the top reply. A former mercenary developer, he's built numerous applications specializing in API consumption and creation. Now he's working on the platform of BeckonCall. He also tweets sporadically from @tjlytle.",
+  "social": [
+    {
+      "name": "Twitter",
+      "link": "http://twitter.com/tjltle"
+    }
+  ],
+  "_links": {
+    "self": {
+      "href": "https://tjlytle.ngrok.io/speaker/a097ddd21ad3c46a6231b22ab6e40ff3"
+    },
+    "talks": [
+      {
+        "href": "https://tjlytle.ngrok.io/talks/bd63965424bc79b8fc0472649f16a0cc",
+        "title": "Hands-On API Design"
+      },
+      {
+        "href": "https://tjlytle.ngrok.io/talks/824f9c92fd740b0b83b16c27d6012de0",
+        "title": "Building PHP Daemons and Long Running Processes"
+      }
+    ]
+  }
+}
