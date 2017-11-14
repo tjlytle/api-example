@@ -9,6 +9,8 @@ interface SourceInterface
 
     public function getTalks($page, $size, \DateTime $after = null, \DateTime $before = null);
 
+    public function getTalkById($id);
+
     public function setFavoriteTalk($user, $id);
 
     public function setFavoriteSpeaker($user, $id);

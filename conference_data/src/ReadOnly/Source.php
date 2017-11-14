@@ -64,6 +64,15 @@ class Source implements SourceInterface
         return $talks;
     }
 
+    public function getTalkById($id)
+    {
+        if(!isset($this->data['talks'][$id])){
+            throw new \InvalidArgumentException('can not find speaker: ' . $id);
+        }
+
+        return $this->data['talks'][$id];
+    }
+
     public function setFavoriteTalk($user, $id)
     {
         throw new ReadOnlyException(__METHOD__);
