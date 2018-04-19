@@ -46,6 +46,10 @@ class Api
 
         $hal = $this->$method($request);
 
+        if($hal instanceof ApiProblem){
+            return $hal;
+        }
+
         if(!($hal instanceof Hal)){
             $problem = new ApiProblem('Could Not Render', 'https://httpstatusdogs.com/500');
             $problem->setStatus(500);
