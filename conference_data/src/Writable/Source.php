@@ -100,6 +100,11 @@ class Source implements SourceInterface
         return $talks;
     }
 
+    public function getTalkById($id)
+    {
+        // TODO: Implement getTalkById() method.
+    }
+
     public function setFavoriteTalk($user, $id)
     {
         // TODO: Implement setFavoriteTalk() method.
