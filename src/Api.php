@@ -47,7 +47,7 @@ class Api
         $hal = $this->$method($request);
 
         if(!($hal instanceof Hal)){
-            $problem = new ApiProblem('Could Not Rendger', 'https://httpstatusdogs.com/500');
+            $problem = new ApiProblem('Could Not Render', 'https://httpstatusdogs.com/500');
             $problem->setStatus(500);
             $problem->setDetail('Internal resource rendering failed.');
             return $problem;
@@ -192,6 +192,57 @@ class Api
 
     protected function handleSpeakers(RequestInterface $request)
     {
+        // This is our data layer, it's not that great.
+        $source = $this->getDataSource();
+
+        // See if this request had an ID, something the route could also do.
+        $id = $this->getId($request);
+
+        // If a specific talk was requested, return that. A better router would
+        // route collection and resource requests to two different methods.
+        if($id){
+            // Our data layer throws exceptions, so catch the one for a bad ID.
+            try{
+                $speaker = $source->getSpeakerById($id);
+            } catch (\InvalidArgumentException $e) {
+                // Let the user know their ID was bad.
+                $problem = new ApiProblem('Speaker Not Found', 'https://httpstatusdogs.com/404');
+                $problem->setStatus(404);
+                $problem->setDetail('Could not find speaker for ID: ' . $id);
+                return $problem;
+            }
+
+            $data = $this->getRepresentationForSpeaker($speaker);
+
+            return $this->getHalForSpeaker($speaker['id'], $data, $request);
+        }
+
+        // Ensure that we have the default paging parameters, and get the talks.
+        $params = $this->getDefaultParams($request);
+        $speakers = $source->getSpeakers($params['page'], $params['size']);
+
+        // Create a HAL objct for our collection, it's data is just the count.
+        $collection = new Hal((string) $request->getUri(), [
+            'count' => count($speakers)
+        ]);
+
+        // Add next, prev, first links.
+        $this->addPagingLinks($collection, $request, $params, count($speakers));
+
+        // Convert all the talks into HAL objects, using the same process as
+        // returning a single talk.
+        foreach($speakers as $speaker)
+        {
+            $data = $this->getRepresentationForSpeaker($speaker);
+            $resource = $this->getHalForSpeaker($speaker['id'], $data, $request);
+
+            // Add the talks to the collection, and ensure that if there's only
+            // one on the page it's still an array as expected.
+            $collection->addResource('speakers', $resource, true);
+        }
+
+        // Return the hAL object to be output.
+        return $collection;
 
     }
 
@@ -309,6 +360,43 @@ class Api
         {
             $data['keywords'][] = trim($keyword);
         }
+
+        return $data;
+    }
+
+    /**
+     * Create a HAL object from the API representation of the speaker. Needs the
+     * speaker id and request to build the self link.
+     *
+     * @param $id
+     * @param $data
+     * @param $speaker
+     * @param RequestInterface $request
+     * @return Hal
+     */
+    protected function getHalForSpeaker($id, $data, RequestInterface $request)
+    {
+        $resource = new Hal(
+            $request->getUri()->withPath('/speaker/') . $id,
+            $data
+        );
+
+        return $resource;
+    }
+
+    /**
+     * Take the flat array the data layer gives us and turn it into something
+     * more useful for API clients. Try to think of how the data will likely
+     * change.
+     *
+     * @param array $talk
+     * @return array
+     */
+    protected function getRepresentationForSpeaker($speaker)
+    {
+        $data = [
+            'name' => $speaker['name'],
+        ];
 
         return $data;
     }
